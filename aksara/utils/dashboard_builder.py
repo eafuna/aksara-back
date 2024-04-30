@@ -2,15 +2,41 @@ from aksara.utils.general_chart_helpers import *
 from aksara.utils.chart_builder import *
 import os
 
+from urllib.parse import urlparse
+import boto3
+from aksara.utils import triggers
+import io
+
 """
 Segregates chart types,
 into respective chart builders
 """
 
+def boto3_s3_get(input_file):
+
+
+    s3Conn = boto3.resource(
+        service_name='s3',
+        region_name=os.environ["AWS_DEFAULT_REGION"],
+        aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
+        aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"]        
+    )
+
+    input_parsed = urlparse(input_file)
+    s3Obj = s3Conn.Object(input_parsed[1].split('.')[0], input_parsed[2].replace('/',''))
+    buffer = io.BytesIO()
+    s3Obj.download_fileobj(buffer)
+
+    # import pdb;pdb.set_trace()
+    triggers.send_telegram("......reading s3:"+input_file)
+
+    return buffer
 
 def build_chart(chart_type, data):
     variables = data["variables"]
-    input_file = data["input"]
+    input_url = data["input"]
+
+    input_file = boto3_s3_get(input_url)
 
     if chart_type == "bar_chart":
         return bar_chart(input_file, variables)

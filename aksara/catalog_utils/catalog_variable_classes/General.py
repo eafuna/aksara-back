@@ -1,3 +1,9 @@
+from urllib.parse import urlparse
+import boto3
+from aksara.utils import triggers
+import io
+import os
+
 class GeneralChartsUtil:
     # Data from file
     file_data = {}
@@ -48,9 +54,11 @@ class GeneralChartsUtil:
         self.all_variable_data = all_variable_data
 
         if "link_preview" in file_data:
-            self.read_from = file_data["link_preview"]
+            #self.read_from = file_data["link_preview"]
+            self.read_from = self.boto3_s3_get(file_data["link_preview"])
         elif "link_parquet" in file_data:
-            self.read_from = file_data["link_parquet"]
+            #self.read_from = file_data["link_parquet"]
+            self.read_from = self.boto3_s3_get(file_data["link_parquet"])
 
         self.file_src = file_src
 
@@ -71,6 +79,25 @@ class GeneralChartsUtil:
         )
         self.downloads = self.build_downloads_info(self.file_data)
         self.chart_details = self.build_intro_info()
+
+    def boto3_s3_get(self, input_file):
+
+        s3Conn = boto3.resource(
+            service_name='s3',
+            region_name=os.environ["AWS_DEFAULT_REGION"],
+            aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
+            aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"]        
+        )
+        input_parsed = urlparse(input_file)
+        s3Obj = s3Conn.Object(input_parsed[1].split('.')[0], input_parsed[2].replace('/',''))
+        buffer = io.BytesIO()
+        s3Obj.download_fileobj(buffer)
+
+        # import pdb;pdb.set_trace()
+        triggers.send_telegram("......reading s3:"+input_file)
+
+        return buffer
+
 
     """
     Gets a nested dictionary key
