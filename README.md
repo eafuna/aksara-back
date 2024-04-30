@@ -7,6 +7,7 @@ The backend API for OpenDOSM that serves data available via [`dosm-malaysia/aksa
 ## Table of Contents
 
 - [Virtual environment setup](#setup-virtual-environment)
+- [AWS credentials setup](#setup-aws-credentials)
 - [Database setup](#setup-db)
 - [Run Development Server](#run-development-server)
 - [API Endpoints](#api-endpoints)
@@ -28,6 +29,15 @@ The backend API for OpenDOSM that serves data available via [`dosm-malaysia/aksa
 source env/bin/activate
 pip install -r requirements.txt
 ```
+
+## Setup AWS credentials
+
+```bash
+EXPORT AWS_DEFAULT_REGION=your_region_here
+EXPORT AWS_ACCESS_KEY_ID=your_access_key_id
+EXPORT AWS_SECRET_ACCESS_KEY=your_secret_access_key
+```
+
 
 ## Setup DB
 
