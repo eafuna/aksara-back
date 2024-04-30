@@ -13,12 +13,16 @@ Sends a telegram message
 
 
 def send_telegram(message):
-    location = "--- " + os.getenv("ENV_LOCATION") + " ---\n"
-    message = location + message
+    try:
+        location = "--- " + os.getenv("ENV_LOCATION") + " ---\n"
+    except:
+        location = "(env.location)"
 
-    params = {"chat_id": os.getenv("TELEGRAM_CHAT_ID"), "text": message}
-    tf_url = f'https://api.telegram.org/bot{os.getenv("TELEGRAM_TOKEN")}/sendMessage'
-    r = requests.get(url=tf_url, data=params)
+    message = location + message
+    print( message )
+    # params = {"chat_id": os.getenv("TELEGRAM_CHAT_ID"), "text": message}
+    # tf_url = f'https://api.telegram.org/bot{os.getenv("TELEGRAM_TOKEN")}/sendMessage'
+    # r = requests.get(url=tf_url, data=params)
 
 
 """
