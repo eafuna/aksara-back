@@ -38,13 +38,15 @@ export AWS_ACCESS_KEY_ID=your_access_key_id
 export AWS_SECRET_ACCESS_KEY=your_secret_access_key
 ```
 
-
-## Setup DB
+## Setup DB  
 
 1. Setup a DB server (PostgresSQL DB recommended) and populate your DB instance settings in the `.env` file.
+>[!NOTE]
+>Aurora Postgres has two endpoints: (a) Writer; (b) Reader. Therefore, choose the appropriate endpoint based on your desired operation.
+
 2. Run migrations to setup all tables: `python manage.py migrate`
-3. Fetch data from `dosm-malaysia/aksara-data` repo and populate or update the DB: `python manage.py loader UPDATE`
-4. To rebuild the DB from scratch: `python manage.py loader REBUILD`
+3. Fetch data from `dosm-malaysia/aksara-data` repo and populate or update the DB: `python manage.py loader <data_type> UPDATE`
+4. To rebuild the DB from scratch: `python manage.py loader <data_type> REBUILD`
 
 ## Run Development Server
 `python manage.py runserver`
