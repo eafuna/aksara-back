@@ -2,7 +2,7 @@
 
 The backend API for OpenDOSM that serves data available via [`dosm-malaysia/aksara-data`](https://github.com/dosm-malaysia/aksara-data) to the frontend at [`dosm-malaysia/aksara-front`](https://github.com/dosm-malaysia/aksara-front).
 - Django app name: `aksara`
-- Database: `postgresql`
+- Database: `AWS Aurora postgresql`
 
 ## Table of Contents
 
